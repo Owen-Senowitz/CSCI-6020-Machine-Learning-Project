@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC Trip Duration Estimator</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>NYC Trip Duration Estimator</h1>
+        <form id="trip-form">
+            <label for="pickup">Pickup Location (Latitude, Longitude):</label>
+            <input type="text" id="pickup_lat" placeholder="Latitude">
+            <input type="text" id="pickup_lon" placeholder="Longitude">
+
+            <label for="dropoff">Dropoff Location (Latitude, Longitude):</label>
+            <input type="text" id="dropoff_lat" placeholder="Latitude">
+            <input type="text" id="dropoff_lon" placeholder="Longitude">
+
+            <button type="button" id="submit">Estimate Trip Duration</button>
+        </form>
+        <div id="results"></div>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
