@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Duration Predictor</title>
+    <title>Trip Duration Predictor with Leaflet</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div class="container">
         <h1>NYC Trip Duration Predictor</h1>
-        <form id="trip-form">
-            <label for="pickup_datetime">Pickup Date and Time:</label>
-            <input type="datetime-local" id="pickup_datetime" required>
 
-            <label for="pickup_location">Pickup Location (Longitude, Latitude):</label>
-            <input type="text" id="pickup_longitude" placeholder="Longitude" required>
-            <input type="text" id="pickup_latitude" placeholder="Latitude" required>
+        <!-- Map for Selecting Locations -->
+        <div id="map"></div>
 
-            <label for="dropoff_location">Dropoff Location (Longitude, Latitude):</label>
-            <input type="text" id="dropoff_longitude" placeholder="Longitude" required>
-            <input type="text" id="dropoff_latitude" placeholder="Latitude" required>
+        <!-- Button to Predict -->
+        <button id="predict-button">Predict Trip Duration</button>
 
-            <button type="button" id="submit">Predict Trip Duration</button>
-        </form>
+        <!-- Results -->
         <div id="results"></div>
 
+        <!-- Evaluation Results -->
         <h2>Model Evaluation Results</h2>
         <button type="button" id="fetch-results">Fetch Evaluation Results</button>
         <div id="evaluation-results"></div>
     </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>

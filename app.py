@@ -31,11 +31,11 @@ def predict():
         dropoff_longitude = float(data["dropoff_longitude"])
         dropoff_latitude = float(data["dropoff_latitude"])
 
-        # Handle datetime parsing
+        # Handle datetime parsing using fromisoformat (Python 3.7+)
         try:
-            pickup_datetime_obj = datetime.strptime(pickup_datetime, "%Y-%m-%d %H:%M:%S")
+            pickup_datetime_obj = datetime.fromisoformat(pickup_datetime.replace("Z", "+00:00"))
         except ValueError:
-            pickup_datetime_obj = datetime.strptime(pickup_datetime, "%Y-%m-%dT%H:%M")
+            return jsonify({"error": "Invalid datetime format"}), 400
 
         # Extract datetime features
         pickup_hour = pickup_datetime_obj.hour
