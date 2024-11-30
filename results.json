@@ -1,0 +1,17 @@
+{
+    "decision_tree": {
+        "mean_squared_error": 252784.11131906757
+    },
+    "knn": {
+        "mean_squared_error": 148502.6928030701
+    },
+    "linear_regression": {
+        "mean_squared_error": 444358.95336053247
+    },
+    "neural_network": {
+        "mean_squared_error": 182424.458147204
+    },
+    "random_forest": {
+        "mean_squared_error": 123673.07587951884
+    }
+}

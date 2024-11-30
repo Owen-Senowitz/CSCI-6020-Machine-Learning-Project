@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
-from geopy.distance import geodesic
+from datetime import datetime
+import json
 
 app = Flask(__name__)
 
@@ -22,42 +23,59 @@ def index():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        # Get user input from form
+        # Get user input from JSON
         data = request.json
-        pickup_lat = float(data["pickup_lat"])
-        pickup_lon = float(data["pickup_lon"])
-        dropoff_lat = float(data["dropoff_lat"])
-        dropoff_lon = float(data["dropoff_lon"])
+        pickup_datetime = data["pickup_datetime"]
+        pickup_longitude = float(data["pickup_longitude"])
+        pickup_latitude = float(data["pickup_latitude"])
+        dropoff_longitude = float(data["dropoff_longitude"])
+        dropoff_latitude = float(data["dropoff_latitude"])
 
-        # Create input data
+        # Handle datetime parsing
+        try:
+            pickup_datetime_obj = datetime.strptime(pickup_datetime, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            pickup_datetime_obj = datetime.strptime(pickup_datetime, "%Y-%m-%dT%H:%M")
+
+        # Extract datetime features
+        pickup_hour = pickup_datetime_obj.hour
+        pickup_dayofweek = pickup_datetime_obj.weekday()
+        pickup_month = pickup_datetime_obj.month
+
+        # Prepare features
         features = pd.DataFrame([{
-            "pickup_hour": 8,  # Example static hour, can make this dynamic
-            "pickup_dayofweek": 1,  # Example static day of the week
-            "pickup_month": 6,  # Example static month
-            "dropoff_hour": 9,  # Example static hour
-            "dropoff_dayofweek": 1,  # Example static day of the week
-            "dropoff_month": 6,  # Example static month
-            "pickup_longitude": pickup_lon,
-            "pickup_latitude": pickup_lat,
-            "dropoff_longitude": dropoff_lon,
-            "dropoff_latitude": dropoff_lat,
-            "passenger_count": 1
+            "pickup_hour": pickup_hour,
+            "pickup_dayofweek": pickup_dayofweek,
+            "pickup_month": pickup_month,
+            "pickup_longitude": pickup_longitude,
+            "pickup_latitude": pickup_latitude,
+            "dropoff_longitude": dropoff_longitude,
+            "dropoff_latitude": dropoff_latitude
         }])
 
         # Scale features
         features_scaled = scaler.transform(features)
 
-        # Predict using all models
+        # Generate predictions
         predictions = {
             model_name: model.predict(features_scaled if model_name != "linear_regression" else features)[0]
             for model_name, model in models.items()
         }
 
-        # Return the predictions
         return jsonify(predictions)
 
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/results", methods=["GET"])
+def results():
+    try:
+        # Load results from results.json
+        with open("results.json", "r") as results_file:
+            results = json.load(results_file)
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

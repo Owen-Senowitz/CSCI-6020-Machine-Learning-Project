@@ -3,24 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NYC Trip Duration Estimator</title>
+    <title>Trip Duration Predictor</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>NYC Trip Duration Estimator</h1>
+        <h1>NYC Trip Duration Predictor</h1>
         <form id="trip-form">
-            <label for="pickup">Pickup Location (Latitude, Longitude):</label>
-            <input type="text" id="pickup_lat" placeholder="Latitude">
-            <input type="text" id="pickup_lon" placeholder="Longitude">
+            <label for="pickup_datetime">Pickup Date and Time:</label>
+            <input type="datetime-local" id="pickup_datetime" required>
 
-            <label for="dropoff">Dropoff Location (Latitude, Longitude):</label>
-            <input type="text" id="dropoff_lat" placeholder="Latitude">
-            <input type="text" id="dropoff_lon" placeholder="Longitude">
+            <label for="pickup_location">Pickup Location (Longitude, Latitude):</label>
+            <input type="text" id="pickup_longitude" placeholder="Longitude" required>
+            <input type="text" id="pickup_latitude" placeholder="Latitude" required>
 
-            <button type="button" id="submit">Estimate Trip Duration</button>
+            <label for="dropoff_location">Dropoff Location (Longitude, Latitude):</label>
+            <input type="text" id="dropoff_longitude" placeholder="Longitude" required>
+            <input type="text" id="dropoff_latitude" placeholder="Latitude" required>
+
+            <button type="button" id="submit">Predict Trip Duration</button>
         </form>
         <div id="results"></div>
+
+        <h2>Model Evaluation Results</h2>
+        <button type="button" id="fetch-results">Fetch Evaluation Results</button>
+        <div id="evaluation-results"></div>
     </div>
     <script src="/static/app.js"></script>
 </body>
