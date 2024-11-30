@@ -7,10 +7,11 @@ from sklearn.linear_model import LinearRegression
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
 import joblib
-import time
 import json
+import time
 
 # Start timing
 start_time = time.time()
@@ -62,13 +63,6 @@ X_train_scaled = scaler_X.fit_transform(X_train)
 X_test_scaled = scaler_X.transform(X_test)
 print("Input features normalized!")
 
-# Normalize target variable
-print("Normalizing target variable...")
-scaler_y = MinMaxScaler()
-y_train_scaled = scaler_y.fit_transform(y_train.values.reshape(-1, 1))
-y_test_scaled = scaler_y.transform(y_test.values.reshape(-1, 1))
-print("Target variable normalized!")
-
 # Train models
 models = {
     "decision_tree": DecisionTreeRegressor(),
@@ -83,7 +77,7 @@ print("Training and evaluating models...")
 for model_name, model in models.items():
     print(f"Training {model_name}...")
     if model_name == "neural_network":
-        model.fit(X_train_scaled, y_train_scaled.ravel())
+        model.fit(X_train_scaled, y_train)  # Neural network requires scaled target
     elif model_name == "linear_regression":
         model.fit(X_train, y_train)  # Linear regression does not need scaled input
     else:
@@ -92,18 +86,28 @@ for model_name, model in models.items():
 
     # Predict on test set
     if model_name == "linear_regression":
-        predictions = model.predict(X_test)
+        y_pred = model.predict(X_test)
     else:
-        predictions = model.predict(X_test_scaled)
-        if model_name == "neural_network":
-            predictions = scaler_y.inverse_transform(predictions.reshape(-1, 1)).flatten()
+        y_pred = model.predict(X_test_scaled)
 
-    # Calculate evaluation metric
-    mse = mean_squared_error(y_test, predictions)
+    # Calculate evaluation metrics
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
     results[model_name] = {
-        "mean_squared_error": mse
+        "mean_squared_error": mse,
+        "r2_score": r2
     }
-    print(f"{model_name} - Mean Squared Error: {mse:.2f}")
+    print(f"{model_name} - Mean Squared Error: {mse:.2f}, R² Score: {r2:.2f}")
+
+    # Plot actual vs predicted
+    plt.figure(figsize=(8, 6))
+    plt.scatter(y_test, y_pred, alpha=0.5)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', color='red')
+    plt.xlabel("Actual Trip Duration")
+    plt.ylabel("Predicted Trip Duration")
+    plt.title(f"{model_name}: Actual vs Predicted")
+    plt.savefig(f"models/{model_name}_regression_plot.png")
+    plt.close()
 
 # Save models
 print("Saving models to 'models' directory...")
@@ -114,12 +118,17 @@ for model_name, model in models.items():
 # Save scalers
 print("Saving scalers...")
 joblib.dump(scaler_X, "models/scaler_X.pkl")
-joblib.dump(scaler_y, "models/scaler_y.pkl")
-print("Scalers saved!")
+print("Scaler saved!")
+
+# Save test data
+print("Saving test data for analysis...")
+joblib.dump(X_test, "models/X_test.pkl")
+joblib.dump(y_test, "models/y_test.pkl")
+print("Test data saved!")
 
 # Save results to JSON
 print("Saving results to results.json...")
-with open("results.json", "w") as results_file:
+with open("models/results.json", "w") as results_file:
     json.dump(results, results_file, indent=4)
 print("Results saved to results.json!")
 

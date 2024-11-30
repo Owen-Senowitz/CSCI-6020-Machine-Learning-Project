@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Duration Predictor with Leaflet</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <title>Trip Duration Predictor</title>
     <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
     <div class="container">
-        <h1>NYC Trip Duration Predictor</h1>
+        <h1>Trip Duration Predictor</h1>
 
-        <!-- Map for Selecting Locations -->
+        <!-- Map -->
         <div id="map"></div>
 
-        <!-- Button to Predict -->
+        <!-- Predict Button -->
         <button id="predict-button">Predict Trip Duration</button>
-
-        <!-- Results -->
         <div id="results"></div>
 
-        <!-- Evaluation Results -->
-        <h2>Model Evaluation Results</h2>
-        <button type="button" id="fetch-results">Fetch Evaluation Results</button>
+        <!-- Fetch Metrics -->
+        <h2>Model Metrics</h2>
+        <button id="fetch-results">Fetch Regression Metrics</button>
         <div id="evaluation-results"></div>
     </div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="/static/app.js"></script>
 </body>
 </html>

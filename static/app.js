@@ -88,7 +88,7 @@ document
 
 document.getElementById("fetch-results").addEventListener("click", async () => {
 	try {
-		const response = await fetch("/results");
+		const response = await fetch("results");
 		const results = await response.json();
 
 		if (results.error) {
@@ -101,7 +101,7 @@ document.getElementById("fetch-results").addEventListener("click", async () => {
 					([model, metrics]) =>
 						`${model} - Mean Squared Error: ${metrics.mean_squared_error.toFixed(
 							2
-						)} seconds²`
+						)}, R² Score: ${metrics.r2_score.toFixed(2)}`
 				)
 				.join("\n");
 			document.getElementById("evaluation-results").innerText = resultsText;

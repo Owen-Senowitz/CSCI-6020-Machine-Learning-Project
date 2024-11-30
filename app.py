@@ -71,7 +71,7 @@ def predict():
 def results():
     try:
         # Load results from results.json
-        with open("results.json", "r") as results_file:
+        with open("models/results.json", "r") as results_file:
             results = json.load(results_file)
         return jsonify(results)
     except Exception as e:
