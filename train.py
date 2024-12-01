@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
+from xgboost import XGBRegressor
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
@@ -69,7 +70,8 @@ models = {
     "knn": KNeighborsRegressor(n_neighbors=5),
     "linear_regression": LinearRegression(),
     "neural_network": MLPRegressor(hidden_layer_sizes=(100, 50), max_iter=1000, random_state=42, alpha=0.01),
-    "random_forest": RandomForestRegressor(n_estimators=100, random_state=42)
+    "random_forest": RandomForestRegressor(n_estimators=100, random_state=42),
+    "xgboost": XGBRegressor(n_estimators=100, random_state=42, learning_rate=0.1)
 }
 
 results = {}

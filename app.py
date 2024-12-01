@@ -12,7 +12,8 @@ models = {
     "knn": joblib.load("models/knn.pkl"),
     "linear_regression": joblib.load("models/linear_regression.pkl"),
     "neural_network": joblib.load("models/neural_network.pkl"),
-    "random_forest": joblib.load("models/random_forest.pkl")
+    "random_forest": joblib.load("models/random_forest.pkl"),
+    "xgboost": joblib.load("models/xgboost.pkl")
 }
 scaler = joblib.load("models/scaler.pkl")
 
@@ -58,7 +59,7 @@ def predict():
 
         # Generate predictions
         predictions = {
-            model_name: model.predict(features_scaled if model_name != "linear_regression" else features)[0]
+            model_name: float(model.predict(features_scaled if model_name != "linear_regression" else features)[0])
             for model_name, model in models.items()
         }
 
@@ -66,7 +67,7 @@ def predict():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+        
 @app.route("/results", methods=["GET"])
 def results():
     try:
